@@ -3,24 +3,23 @@
 
 using namespace simple_json;
 
-const auto test = R"(
-[
-    {
-        "id": 1,
-        "name": "Player1",
-        "score": 100
-    },
-    {
-        "id": 2,
-        "name": "Player2",
-        "score": 200
-    }
-]
-)";
-
 int main() {
-    json_reader reader(test);
-    json_object json = reader.read();
-    std::cout << json_writer(json,4).pretty() << std::endl;
+
+    json_object author;
+    author["name"] = "Maks";
+    author["surname"] = "Makuta";
+    author["gender"] = "male";
+    author["languages"] = std::initializer_list<std::string>{"C++", "Java", "Kotlin"};
+
+    json_object project;
+    project["name"] = "lib_simple_json";
+    project["lang"] = "C++";
+    project["tools"] = std::initializer_list<std::string>{"CMake", "CLion"};
+
+    json_object result;
+    result["author"] = author;
+    result["project"] = project;
+
+    std::cout << json_writer(result,4).compact() << std::endl;
     return 0;
 }
