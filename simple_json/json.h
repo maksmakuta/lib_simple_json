@@ -15,14 +15,11 @@ namespace simple_json {
     class json_object : public std::map<std::string, json_value>{
     public:
         json_object() = default;
-
-
     };
 
     class json_array : public std::vector<json_value>{
     public:
         json_array() = default;
-
         json_array(const std::initializer_list<bool>& v);
         json_array(const std::initializer_list<double>& v);
         json_array(const std::initializer_list<std::string>& v);
@@ -106,7 +103,6 @@ namespace simple_json {
         std::string parseKey();
         json_value parseNumber();
 
-    private:
         std::string source;
         uint position{0};
     };

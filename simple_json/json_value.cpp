@@ -32,7 +32,6 @@ namespace simple_json {
     json_value& json_value::operator=(const char* v) {
         emplace<std::string>(std::string(v));
         return *this;
-
     }
 
     json_value& json_value::operator=(const std::string& v){

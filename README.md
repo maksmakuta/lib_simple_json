@@ -2,15 +2,21 @@
 
 Simple JSON library build on top of STL
 
+This project was created to practice and learn something new. If you need a JSON library for C++, use something else, or you can use this project at your own risk
+
 ### Features
  - Construct JSON like std::map
  - Read JSON data from string
  - Write JSON into string (or variable/file/etc)
    - Pretty printer ```json_writer().pretty()```
    - Compact printer ```json_writer().compact()```
+ - Operations with values
+   - Check type
+   - Get data
+   - Rewrite value (using same type or another)
 
 ### Dependencies
- - C++20 with STL
+ - C++20 with STL (std::vector, std::variant, std::string, std::map, std::optional)
 
 ### Example
 
