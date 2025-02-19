@@ -20,6 +20,9 @@ int main() {
     result["author"] = author;
     result["project"] = project;
 
+    // retrieving value from json_object
+    std::cout << "name = " << *author["name"].getString() << std::endl;
+
     std::cout << json_writer(result,4).compact() << std::endl;
     return 0;
 }

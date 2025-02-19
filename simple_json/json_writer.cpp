@@ -23,24 +23,24 @@ namespace simple_json {
 
     std::string json_writer::pretty(const json_value& obj){
         std::stringstream ss;
-        if (std::get_if<std::nullptr_t>(&obj.value)) {
+        if (std::get_if<std::nullptr_t>(&obj)) {
             ss << "null";
-        }else if (const auto& type_bool = std::get_if<bool>(&obj.value)) {
+        }else if (const auto& type_bool = std::get_if<bool>(&obj)) {
             ss << std::string(*type_bool ? "true" : "false");
-        }else if (const auto& type_num = std::get_if<double>(&obj.value)) {
+        }else if (const auto& type_num = std::get_if<double>(&obj)) {
             ss << *type_num ;
-        }else if (const auto& type_str = std::get_if<std::string>(&obj.value)) {
+        }else if (const auto& type_str = std::get_if<std::string>(&obj)) {
             ss << "\"" << *type_str << "\"";
-        }else if (const auto& type_arr = std::get_if<json_array>(&obj.value)) {
+        }else if (const auto& type_arr = std::get_if<json_array>(&obj)) {
             ss << pretty(*type_arr);
-        }else if (const auto& type_obj = std::get_if<json_object>(&obj.value)) {
+        }else if (const auto& type_obj = std::get_if<json_object>(&obj)) {
             ss << pretty(*type_obj);
         }
         return ss.str();
     }
 
     bool is_composite(const json_value& obj) {
-        return std::holds_alternative<json_array>(obj.value) || std::holds_alternative<json_object>(obj.value);
+        return std::holds_alternative<json_array>(obj) || std::holds_alternative<json_object>(obj);
     }
 
     std::string json_writer::pretty(const json_array& obj){
@@ -80,17 +80,17 @@ namespace simple_json {
 
     std::string json_writer::compact(const json_value& obj){
         std::stringstream ss;
-        if (std::get_if<std::nullptr_t>(&obj.value)) {
+        if (std::get_if<std::nullptr_t>(&obj)) {
             ss << "null";
-        }else if (const auto& type_bool = std::get_if<bool>(&obj.value)) {
+        }else if (const auto& type_bool = std::get_if<bool>(&obj)) {
             ss << std::string(*type_bool ? "true" : "false");
-        }else if (const auto& type_num = std::get_if<double>(&obj.value)) {
+        }else if (const auto& type_num = std::get_if<double>(&obj)) {
             ss << *type_num ;
-        }else if (const auto& type_str = std::get_if<std::string>(&obj.value)) {
+        }else if (const auto& type_str = std::get_if<std::string>(&obj)) {
             ss << "\"" << *type_str << "\"";
-        }else if (const auto& type_arr = std::get_if<json_array>(&obj.value)) {
+        }else if (const auto& type_arr = std::get_if<json_array>(&obj)) {
             ss << compact(*type_arr);
-        }else if (const auto& type_obj = std::get_if<json_object>(&obj.value)) {
+        }else if (const auto& type_obj = std::get_if<json_object>(&obj)) {
             ss << compact(*type_obj);
         }
         return ss.str();

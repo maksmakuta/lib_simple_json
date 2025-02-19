@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <map>
+#include <optional>
 #include <string>
 #include <variant>
 
@@ -14,6 +15,8 @@ namespace simple_json {
     class json_object : public std::map<std::string, json_value>{
     public:
         json_object() = default;
+
+
     };
 
     class json_array : public std::vector<json_value>{
@@ -25,48 +28,50 @@ namespace simple_json {
         json_array(const std::initializer_list<std::string>& v);
         json_array(const std::initializer_list<json_object>& v);
         json_array(const std::initializer_list<json_array>& v);
-
     };
 
-    class json_value{
+    using json_variant = std::variant<
+        std::nullptr_t, bool, double, std::string, json_array, json_object
+    >;
+
+    class json_value : public json_variant{
     public:
-        using json_type = std::variant<
-            std::nullptr_t,
-            bool,
-            double,
-            std::string,
-            json_array,
-            json_object
-        >;
+        json_value() = default;
 
-        json_value();
-        explicit json_value(bool b);
-        explicit json_value(int i);
-        explicit json_value(double d);
-        explicit json_value(const std::string& s);
-        explicit json_value(const char* s);
-        explicit json_value(const json_array& arr);
-        explicit json_value(const json_object& obj);
+        explicit json_value(bool);
+        explicit json_value(double v);
+        explicit json_value(long v);
+        explicit json_value(const std::string& v);
+        explicit json_value(const json_array& v);
+        explicit json_value(const json_object& v);
 
-        json_value(const json_value& obj);
+        json_value& operator=(std::nullptr_t);
+        json_value& operator=(bool);
+        json_value& operator=(double v);
+        json_value& operator=(long v);
+        json_value& operator=(const char* v);
+        json_value& operator=(const std::string& v);
+        json_value& operator=(const json_array& v);
+        json_value& operator=(const json_object& v);
 
-        json_value& operator=(const std::nullptr_t& new_value);
-        json_value& operator=(bool new_value);
-        json_value& operator=(int new_value);
-        json_value& operator=(double new_value);
-        json_value& operator=(const std::string& new_value);
-        json_value& operator=(const char* new_value);
-        json_value& operator=(const json_array& new_value);
-        json_value& operator=(const json_object& new_value);
-        json_value& operator=(const std::initializer_list<bool>& v);
-        json_value& operator=(const std::initializer_list<double>& v);
-        json_value& operator=(const std::initializer_list<std::string>& v);
-        json_value& operator=(const std::initializer_list<json_object>& v);
-        json_value& operator=(const std::initializer_list<json_array>& v);
+        [[nodiscard]] bool isBool() const;
+        [[nodiscard]] bool isNumber() const;
+        [[nodiscard]] bool isString() const;
+        [[nodiscard]] bool isObject() const;
+        [[nodiscard]] bool isArray() const;
+        [[nodiscard]] bool isNull() const;
 
-        bool operator==(const json_value& obj) const;
+        [[nodiscard]] bool getBoolOr(bool def = false) const;
+        [[nodiscard]] double getNumberOr(double def = 0.0) const;
+        [[nodiscard]] std::string getStringOr(const std::string& def = "") const;
+        [[nodiscard]] json_object getObjectOr(const json_object& def = {}) const;
+        [[nodiscard]] json_array getArrayOr(const json_array& def = {}) const;
 
-        json_type value;
+        [[nodiscard]] std::optional<bool> getBool() const;
+        [[nodiscard]] std::optional<double> getNumber() const;
+        [[nodiscard]] std::optional<std::string> getString() const;
+        [[nodiscard]] std::optional<json_object> getObject() const;
+        [[nodiscard]] std::optional<json_array> getArray() const;
     };
 
     class json_writer {
@@ -92,7 +97,8 @@ namespace simple_json {
     class json_reader {
     public:
         explicit json_reader(std::string input);
-        json_object read();
+        json_object readObject();
+        json_array readArray();
     private:
         json_object parseObject();
         json_array  parseArray();

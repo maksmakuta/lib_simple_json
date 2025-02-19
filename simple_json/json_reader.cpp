@@ -9,16 +9,12 @@ namespace simple_json {
         std::erase_if(source, isspace);
     }
 
-    json_object json_reader::read() {
-        json_object result;
-        if (!source.empty()) {
-            if (*source.begin() == '[') {
-                result["arr"] = parseArray();
-            }else{
-                result = parseObject();
-            }
-        }
-        return result;
+    json_object json_reader::readObject(){
+        return source.empty() ? json_object() : parseObject();
+    }
+
+    json_array json_reader::readArray(){
+        return source.empty() ? json_array() : parseArray();
     }
 
     json_object json_reader::parseObject(){
@@ -98,7 +94,6 @@ namespace simple_json {
         return key;
     }
 
-
     json_value json_reader::parseNumber() {
         std::string numberStr;
         bool isFloatingPoint = false;
@@ -130,7 +125,7 @@ namespace simple_json {
         if (isFloatingPoint) {
             value = std::stod(numberStr); // Convert to double
         } else {
-            value = std::stoi(numberStr); // Convert to int
+            value = std::stol(numberStr); // Convert to int
         }
         return value;
     }
